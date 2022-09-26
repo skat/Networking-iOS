@@ -9,12 +9,27 @@ import Foundation
 import AuthenticationServices
 
 
+/// Main functionality of this is like the following list:
+/// 
+/// - Fetch token from Keychain
+///     - Validate token if there is a token in Keychain
+///         - Return token if it's valid
+///         - Refresh token if it's not valid
+///             - Refresh token if refreshtToken is valid
+///             - Navigate to Login if refreshToken is not valid
+///     - Navigate to Login if there is not a token in Keychain
+///         - Login flow
+///             - Get authorization code
+///             - Fetch token using the authorization code
 public final class AuthenticationHandler: NSObject {
     // MARK: Properties
     internal let configuration: Configuration
     internal let contextProvider: ASPresentationAnchor
     // MARK: Methods
     /// You should use this method to be able to start using ``AuthenticationHandler``
+    ///
+    /// Inject ``Configuration`` and **ASPresentationAnchor** to the init function to be able to work with the library and look at **Example** to know how to do it.
+    ///
     /// - Example:
     /// ````
     /// import AuthenticationServices
@@ -42,6 +57,7 @@ public final class AuthenticationHandler: NSObject {
     /// )
     /// ````
     /// - Parameter configuration: The only way you can using this lib, look at example
+    /// - Parameter contextProvider: Provide a window to show the login, look at example
     public init(configuration: Configuration, contextProvider: ASPresentationAnchor) {
         self.configuration = configuration
         self.contextProvider = contextProvider
