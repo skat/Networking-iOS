@@ -7,6 +7,7 @@
 
 import Foundation
 public extension AuthenticationHandler {
+    /// Mapped as much as possible all the errors in the project to these
      enum CustomError: Error, LocalizedError, Equatable {
         case decodingError
         case noResponse

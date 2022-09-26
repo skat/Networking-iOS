@@ -12,27 +12,41 @@ import AuthenticationServices
 public final class AuthenticationHandler: NSObject {
     // MARK: Properties
     internal let configuration: Configuration
+    internal let contextProvider: ASPresentationAnchor
     // MARK: Methods
     /// You should use this method to be able to start using ``AuthenticationHandler``
     /// - Example:
     /// ````
-    /// AuthenticationHandler.Configuration
-    /// (
-    ///     baseURL: "https://billetautomat-keycloak-dcs-plugin-master-test.ocpt.ccta.dk",
-    ///     clientID: "digital-logbog",
-    ///     authorizePath: "/auth/realms/azure-uat/protocol/openid-connect/auth",
-    ///     accessTokenPath: "/auth/realms/azure-uat/protocol/openid-connect/token",
-    ///     userInfoPath: "/auth/realms/azure-uat/protocol/openid-connect/userinfo",
-    ///     callBackURL: "dk.ufst.toldkontrol.debug:/",
-    ///     callbackURLScheme: "dk.ufst.toldkontrol.debug",
-    ///     scopes: ["openid", "digital-logbog"]
-    ///)
+    /// import AuthenticationServices
+    /// import Authentication
+    ///
+    /// var contextProvider: ASPresentationAnchor?
+    /// DispatchQueue.main.async {
+    ///     let scenes = UIApplication.shared.connectedScenes
+    ///     let windowScene = scenes.first as? UIWindowScene
+    ///     contextProvider = windowScene?.windows.first
+    /// }
+    ///
+    /// AuthenticationHandler(
+    ///     configuration: AuthenticationHandler.Configuration(
+    ///         baseURL: "https://billetautomat-keycloak-dcs-plugin-master-test.ocpt.ccta.dk",
+    ///         clientID: "digital-logbog",
+    ///         authorizePath: "/auth/realms/azure-uat/protocol/openid-connect/auth",
+    ///         accessTokenPath: "/auth/realms/azure-uat/protocol/openid-connect/token",
+    ///         userInfoPath: "/auth/realms/azure-uat/protocol/openid-connect/userinfo",
+    ///         callBackURL: "dk.ufst.toldkontrol.debug:/",
+    ///         callbackURLScheme: "dk.ufst.toldkontrol.debug",
+    ///         scopes: ["openid", "digital-logbog"]
+    ///     ),
+    ///     contextProvider: contextProvider ?? ASPresentationAnchor()
+    /// )
     /// ````
     /// - Parameter configuration: The only way you can using this lib, look at example
-    public init(configuration: Configuration) {
+    public init(configuration: Configuration, contextProvider: ASPresentationAnchor) {
         self.configuration = configuration
+        self.contextProvider = contextProvider
     }
-    /// It gives User Info coming from OAuth server by doing the following steps:
+    /// Gives User Info coming from OAuth server by Fetching token and Request to fetch user info
     ///
     /// - Fetch token by using ``fetchToken()``
     /// - Get UserInfo by using token coming from above and return it without changes
@@ -43,7 +57,7 @@ public final class AuthenticationHandler: NSObject {
         let token = try await fetchToken()
         return try await getUserInfo(token: token)
     }
-    /// It does the following steps and give you token:
+    /// Give you the token, either from Keychain or login user by using AuthenticationServices also Store it in Keychain
     ///
     /// - Fetch token from Keychain
     ///     - Validate token if there is a token in Keychain
@@ -65,12 +79,23 @@ public final class AuthenticationHandler: NSObject {
             return try await login()
         }
     }
+    /// Force user to Login by using AuthenticationServices
+    /// - Login flow
+    ///     - Get authorization code
+    ///     - Fetch token using the authorization code
+    /// - Warning: It wont use the stored Token from Keychain and **Force user to login**.
+    ///     If you just want the Token use ``fetchToken()``
+    /// - Returns: discardableResult: ``AuthenticationHandler/TokenModel``
+    /// - Throws: ``AuthenticationHandler/CustomError``
     @discardableResult
     public func login() async throws -> TokenModel {
         let callBackURL = await getAuthorizationCode()
         let tokenModel = try await getToken(authorizationCode: callBackURL.get())
         return tokenModel
     }
+    /// Checks if Token exist and it's valid and if It's not valid it invalidate the token.
+    ///
+    /// - Returns: Optinal ``AuthenticationHandler/TokenModel``
     public func checkTokenIfExist() -> TokenModel? {
         if let token = KeychainHelper.retrieveToken(), token.refreshTokenIsValid {
             return token
@@ -84,7 +109,7 @@ public final class AuthenticationHandler: NSObject {
         KeychainHelper.invalidateToken()
     }
     /// Shows How to initial configuration
-    /// - important:This should not be used any project as a public init
+    /// - Warning:This should not be used any project as a public init
     private override init() {
         self.configuration = AuthenticationHandler.Configuration(
             baseURL: "https://billetautomat-keycloak-dcs-plugin-master-test.ocpt.ccta.dk",
@@ -96,6 +121,13 @@ public final class AuthenticationHandler: NSObject {
             callbackURLScheme: "dk.ufst.toldkontrol.debug",
             scopes: ["openid", "digital-logbog"]
         )
+        var contextProvider: ASPresentationAnchor?
+        DispatchQueue.main.async {
+            let scenes = UIApplication.shared.connectedScenes
+            let windowScene = scenes.first as? UIWindowScene
+            contextProvider = windowScene?.windows.first
+        }
+        self.contextProvider = contextProvider ?? ASPresentationAnchor()
     }
 }
 // MARK: - Private Methodes
@@ -201,12 +233,6 @@ extension AuthenticationHandler {
 // MARK: - Protocol Handlers
 extension AuthenticationHandler: ASWebAuthenticationPresentationContextProviding {
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        var window: ASPresentationAnchor?
-        DispatchQueue.main.async {
-            let scenes = UIApplication.shared.connectedScenes
-            let windowScene = scenes.first as? UIWindowScene
-            window = windowScene?.windows.first
-        }
-    return window ?? ASPresentationAnchor()
+        return self.contextProvider
   }
 }
