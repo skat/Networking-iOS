@@ -13,14 +13,14 @@ public extension AuthenticationHandler {
     /// ````
     /// AuthenticationHandler.Configuration
     /// (
-    ///     baseURL: "https://billetautomat-keycloak-dcs-plugin-master-test.ocpt.ccta.dk",
-    ///     clientID: "digital-logbog",
-    ///     authorizePath: "/auth/realms/azure-uat/protocol/openid-connect/auth",
-    ///     accessTokenPath: "/auth/realms/azure-uat/protocol/openid-connect/token",
-    ///     userInfoPath: "/auth/realms/azure-uat/protocol/openid-connect/userinfo",
-    ///     callBackURL: "dk.ufst.toldkontrol.debug:/",
-    ///     callbackURLScheme: "dk.ufst.toldkontrol.debug",
-    ///     scopes: ["openid", "digital-logbog"]
+    ///     baseURL: "https://example.com",
+    ///     clientID: "+++++++",
+    ///     authorizePath: "/auth/realms/++++++/protocol/openid-connect/auth",
+    ///     accessTokenPath: "/auth/realms/++++++/protocol/openid-connect/token",
+    ///     userInfoPath: "/auth/realms/++++++/protocol/openid-connect/userinfo",
+    ///     callBackURL: "dk.++++.+++++.debug:/",
+    ///     callbackURLScheme: "dk.++++.+++++.debug",
+    ///     scopes: ["openid", "++++++"]
     ///)
     /// ````
     struct Configuration {
@@ -39,14 +39,14 @@ public extension AuthenticationHandler {
         /// ````
         /// AuthenticationHandler.Configuration
         /// (
-        ///     baseURL: "https://billetautomat-keycloak-dcs-plugin-master-test.ocpt.ccta.dk",
-        ///     clientID: "digital-logbog",
-        ///     authorizePath: "/auth/realms/azure-uat/protocol/openid-connect/auth",
-        ///     accessTokenPath: "/auth/realms/azure-uat/protocol/openid-connect/token",
-        ///     userInfoPath: "/auth/realms/azure-uat/protocol/openid-connect/userinfo",
-        ///     callBackURL: "dk.ufst.toldkontrol.debug:/",
-        ///     callbackURLScheme: "dk.ufst.toldkontrol.debug",
-        ///     scopes: ["openid", "digital-logbog"]
+        ///     baseURL: "https://example.com",
+        ///     clientID: "+++++++",
+        ///     authorizePath: "/auth/realms/++++++/protocol/openid-connect/auth",
+        ///     accessTokenPath: "/auth/realms/++++++/protocol/openid-connect/token",
+        ///     userInfoPath: "/auth/realms/++++++/protocol/openid-connect/userinfo",
+        ///     callBackURL: "dk.++++.+++++.debug:/",
+        ///     callbackURLScheme: "dk.++++.+++++.debug",
+        ///     scopes: ["openid", "++++++"]
         ///)
         /// ````
         public init (
