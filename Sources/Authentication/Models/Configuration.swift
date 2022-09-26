@@ -74,13 +74,13 @@ public extension AuthenticationHandler {
         
         let codeVerifier: String?
         let codeChallenge: String?
-        let baseURL: String //= "https://billetautomat-keycloak-dcs-plugin-master-test.ocpt.ccta.dk"
-        let clientID: String //= "digital-logbog"
-        let authorizePath: String //= "/auth/realms/azure-uat/protocol/openid-connect/auth"
-        let accessTokenPath: String //= "/auth/realms/azure-uat/protocol/openid-connect/token"
-        let userInfoPath: String //="/auth/realms/dcs63/protocol/openid-connect/userinfo"
-        let callBackURL: String //= "dk.ufst.toldkontrol.debug:/"
-        let callbackURLScheme: String // = "dk.ufst.toldkontrol.debug"
-        let scopes: [String] //= ["openid", "digital-logbog"]
+        let baseURL: String
+        let clientID: String
+        let authorizePath: String
+        let accessTokenPath: String
+        let userInfoPath: String
+        let callBackURL: String
+        let callbackURLScheme: String
+        let scopes: [String]
     }
 }

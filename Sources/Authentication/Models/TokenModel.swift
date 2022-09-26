@@ -7,19 +7,20 @@
 
 import Foundation
 public extension AuthenticationHandler {
+    /// This is a Model that you expect from the package, some of the variables are optional but the AccessToken are there always.
     struct TokenModel: Codable {
         public var accessToken: String
-        public var expiresIn: Int
-        public var refreshExpiresIn: Int
-        public var refreshToken: String
+        var expiresIn: Int
+        var refreshExpiresIn: Int
+        var refreshToken: String
         public var tokenType: String
-        public var idToken: String?
+        var idToken: String?
         public var sessionState: String?
         public var scope: String
-        public var expiresAt: Date {
+        var expiresAt: Date {
             return Date().addingTimeInterval(TimeInterval(expiresIn))
         }
-        public var refreshExpiresAt: Date {
+        var refreshExpiresAt: Date {
             return Date().addingTimeInterval(TimeInterval(refreshExpiresIn))
         }
         var wrap: String {
