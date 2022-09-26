@@ -71,12 +71,12 @@ public final class AuthenticationHandler: NSObject {
         let tokenModel = try await getToken(authorizationCode: callBackURL.get())
         return tokenModel
     }
-    public func checkTokenIfExist() -> Bool {
+    public func checkTokenIfExist() -> TokenModel? {
         if let token = KeychainHelper.retrieveToken(), token.refreshTokenIsValid {
-            return true
+            return token
         } else {
-            logout()
-            return false
+            KeychainHelper.invalidateToken()
+            return nil
         }
     }
     /// Invalidate token from keychain
@@ -150,7 +150,6 @@ extension AuthenticationHandler {
         }
     }
     private func getToken(authorizationCode: String? = nil, refreshToken: String? = nil) async throws -> TokenModel {
-        KeychainHelper.invalidateToken()
         do {
             var body: Data?
             if let refreshToken = refreshToken {
@@ -165,7 +164,7 @@ extension AuthenticationHandler {
                 header: ["Content-Type" : "application/x-www-form-urlencoded; charset=UTF-8"],
                 body: body
             )
-
+            KeychainHelper.invalidateToken()
             if let response = try await sendRequest(request: request, responseType: TokenModel.self) {
                 KeychainHelper.storeToken(response)
                 return response
@@ -181,7 +180,6 @@ extension AuthenticationHandler {
         }
     }
     private func getUserInfo(token: TokenModel) async throws -> UserModel {
-        KeychainHelper.invalidateToken()
         do {
 
             let request = try createUserRequest(
