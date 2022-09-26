@@ -7,7 +7,7 @@
 
 import Foundation
 import AuthenticationServices
-
+import UIKit
 
 /// Main functionality of this is like the following list:
 /// 
