@@ -66,7 +66,6 @@ public final class AuthenticationHandler: NSObject {
     ///
     /// - Fetch token by using ``fetchToken()``
     /// - Get UserInfo by using token coming from above and return it without changes
-    ///
     /// - Returns: ``AuthenticationHandler/UserModel``
     /// - Throws: ``AuthenticationHandler/CustomError``
     public func getUser() async throws -> UserModel {
@@ -85,7 +84,12 @@ public final class AuthenticationHandler: NSObject {
     ///         - Login flow
     ///             - Get authorization code
     ///             - Fetch token using the authorization code
-    ///
+    /// - Example:
+    /// ````
+    /// Task {
+    ///    let token = try await authHandler.fetchToken()
+    /// }
+    /// ````
     /// - Returns: ``AuthenticationHandler/TokenModel``
     /// - Throws: ``AuthenticationHandler/CustomError``
     public func fetchToken() async throws -> TokenModel {
