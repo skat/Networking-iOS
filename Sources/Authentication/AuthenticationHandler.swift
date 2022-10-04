@@ -178,7 +178,7 @@ extension AuthenticationHandler {
                 url: url,
                 callbackURLScheme: self.configuration.callbackURLScheme) { callbackURL, error in
                     if let error = error {
-                        continuation.resume(returning: .failure(error))
+                        continuation.resume(returning: .failure(CustomError.dissmissLogin(error: error.localizedDescription)))
                     } else {
                         if
                             let callbackURL = callbackURL,

@@ -13,6 +13,7 @@ public extension AuthenticationHandler {
         case noResponse
         case invalidURL
         case invalidData
+        case dissmissLogin(error: String)
         case unexpectedStatusCode(_ code: Int)
         case internalError(_ msg: String)
         public var message: String {
@@ -29,6 +30,8 @@ public extension AuthenticationHandler {
                 return "Unexpected Error with code: \(code)"
             case .internalError(let msg):
                 return "Unexpected Error with code: \(msg)"
+            case .dissmissLogin(let error):
+                return "Dissmiss Login \(error)"
             }
         }
     }
