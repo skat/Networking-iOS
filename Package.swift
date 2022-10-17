@@ -16,8 +16,15 @@ let package = Package(
         .library(
             name: "Authentication",
             targets: ["Authentication"]),
+        .library(
+            name: "Tracking",
+            targets: ["Tracking"]),
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/mixpanel/mixpanel-swift",
+            .exact("3.5.1")
+        )
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -31,5 +38,10 @@ let package = Package(
         .target(
             name: "Authentication",
             dependencies: []),
+        .target(
+            name: "Tracking",
+            dependencies: [
+                .product(name: "Mixpanel", package: "mixpanel-swift"),
+            ]),
     ]
 )
