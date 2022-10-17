@@ -21,7 +21,14 @@ public enum EventTrigger {
 /// This client can be mocked if needed and is therefore easy to test in context to the rest of the application logic
 public struct MixPanelClient {
     
+    /// Initialising MixPanel
+    /// - Parameters:
+    ///   - mixpanelHash: unique mixpanel hash for the given project
+    /// - Returns: Void
+    public var initialise: (_ mixpanelHash: String) -> Void
+    
     /// Tracks MixPanel event
+    /// The mixpanel client should initialized before this method is used
     /// - Parameters:
     ///   - event: type of event that triggered the tracking
     ///   - screenIdentifier: identifier for the screen
@@ -36,6 +43,9 @@ public struct MixPanelClient {
 
 public extension MixPanelClient {
     static var live = Self(
+        initialise: {
+            Mixpanel.initialize(token: $0)
+        },
         trackEvent: { event, screenIdentifier, extraProperties in
             
             var eventName: String = generateEventName(event)
@@ -62,6 +72,10 @@ public extension MixPanelClient {
     )
 }
 
+public extension MixPanelClient {
+    static var emptyClient = Self(initialise: { _ in }, trackEvent: { _, _, _ in })
+}
+
 private func generateEventName(_ event: EventTrigger) -> String {
         
     switch event {
@@ -74,8 +88,4 @@ private func generateEventName(_ event: EventTrigger) -> String {
     case .willTerminate:
         return "App Terminated"
     }
-}
-
-public extension MixPanelClient {
-    static var mock = Self(trackEvent: { _, _, _ in })
 }
