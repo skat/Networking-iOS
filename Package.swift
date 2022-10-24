@@ -23,7 +23,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/mixpanel/mixpanel-swift",
-            .exact("3.5.1")
+            .upToNextMinor(from: "4.0.3")
         )
     ],
     targets: [

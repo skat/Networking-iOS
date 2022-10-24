@@ -34,6 +34,31 @@ public struct MixPanelClient {
     ///   - screenIdentifier: identifier for the screen
     ///   - extraProperties: Extra event properties where key is the property key and the second one is the value.
     /// - Returns: Void
+    /// - Example: enum example to be used for screenIdentifier and extraProperties
+    /// ````
+    /// public struct MixPanelString {
+    ///    public enum ScreenIdentifier: String, RawRepresentable {
+    ///        case screen1
+    ///        case screen2
+    ///        case screen3
+    ///    }
+    ///
+    ///    public enum PropertyKey: String {
+    ///        case key1 = "Key1"
+    ///        case key2 = "Key2"
+    ///    }
+    ///
+    ///    public enum PropertyValue: String, RawRepresentable {
+    ///        case value1
+    ///        case value2
+    ///    }
+    ///
+    ///    public enum OnTapValue: String, RawRepresentable {
+    ///        case button1
+    ///        case button2
+    ///    }
+    ///}
+    /// ````
     public var trackEvent: (
         _ event: EventTrigger,
         _ screenIdentifier: String?,
