@@ -69,7 +69,7 @@ public struct MixPanelClient {
 public extension MixPanelClient {
     static var live = Self(
         initialise: {
-            Mixpanel.initialize(token: $0)
+            Mixpanel.initialize(token: $0, trackAutomaticEvents: true)
         },
         trackEvent: { event, screenIdentifier, extraProperties in
             
