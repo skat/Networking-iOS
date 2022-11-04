@@ -14,6 +14,7 @@ public enum EventTrigger {
     case viewAppear
     case onTap(String)
     case willTerminate
+    case action(String)
 }
 
 /// Generic Mixpanel client
@@ -112,5 +113,7 @@ private func generateEventName(_ event: EventTrigger) -> String {
         
     case .willTerminate:
         return "App Terminated"
+    case .action(let value):
+        return "\(value)"
     }
 }
