@@ -15,10 +15,16 @@ extension AuthenticationHandler {
             }
             switch response.statusCode {
                 
+                
             case 200...299:
                 if data.isEmpty {
                     return nil
                 } else {
+#if DEBUG
+                    let encodedData = NSString(data: data, encoding: String.Encoding.utf8.rawValue)!
+                    print("Printing billetautomaten request:")
+                    dump(encodedData)
+#endif
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     guard let responseType = responseType,
