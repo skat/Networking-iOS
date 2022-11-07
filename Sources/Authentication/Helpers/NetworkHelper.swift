@@ -26,6 +26,7 @@ extension AuthenticationHandler {
 //                    dump(encodedData)
 //#endif
                     let str = String(decoding: data, as: UTF8.self)
+                    NSLog("Printing from package:")
                     NSLog(str)
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
