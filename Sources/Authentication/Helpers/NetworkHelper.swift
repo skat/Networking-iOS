@@ -20,13 +20,8 @@ extension AuthenticationHandler {
                 if data.isEmpty {
                     return nil
                 } else {
-//#if DEBUG
-//                    let encodedData = NSString(data: data, encoding: String.Encoding.utf8.rawValue)!
-//                    print("Printing billetautomaten request:")
-//                    dump(encodedData)
-//#endif
                     let str = String(decoding: data, as: UTF8.self)
-                    NSLog("Printing from package:")
+                    NSLog("Printing request from package:")
                     NSLog(str)
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase

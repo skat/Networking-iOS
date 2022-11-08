@@ -174,6 +174,9 @@ extension AuthenticationHandler {
             
             guard let url = createAuthorizationURL() else { return continuation.resume(returning: .failure(CustomError.invalidURL)) }
             
+            NSLog("Printing Authorization URL from package:")
+            NSLog(url.description)
+            
             let authenticationSession = ASWebAuthenticationSession(
                 url: url,
                 callbackURLScheme: self.configuration.callbackURLScheme) { callbackURL, error in
