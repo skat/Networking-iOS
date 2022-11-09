@@ -45,7 +45,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
             return "JSON Conversion Failure -> \(description)"
         case .backendError(let code):
             return "Backend Error with code: \(code)"
-        case .knownError(data: let data, code: let code):
+        case .knownError(data: let _, code: let code):
            return "known error with code: \(code)"
         }
     }
