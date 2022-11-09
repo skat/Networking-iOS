@@ -22,7 +22,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
     case requestFailed(_ description: String)
     case urlError(_ code: Int, _ description: String? = nil)
     case encodingError(_ description: String)
-    case knownError(data: Data, code: Int)
+    case clientEntityError(data: Data, code: Int)
     
     // MARK: - The idea is that wherever possible, we will make the message and title into a phrase key so where we display the errors (on alert for example) we will do the .localized() and if they phrase key exists, we display the translated text, otherwise we just return the error itself.
     public var message: String {
@@ -43,7 +43,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
             return "JSON Conversion Failure -> \(description)"
         case .backendError(let code):
             return "Backend Error with code: \(code)"
-        case .knownError(data: _, code: let code):
+        case .clientEntityError(data: _, code: let code):
             return "known error with code: \(code)"
         }
     }
@@ -52,7 +52,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
         switch self {
         case .decodingError, .invalidURL, .noResponse, .unauthorized, .unknown,
                 .noInternet, .invalidData, .requestFailed, .urlError, .backendError,
-                .unexpectedStatusCode, .encodingError, .knownError:
+                .unexpectedStatusCode, .encodingError, .clientEntityError:
             return "networkErrorTitle.\(self)"
         case .mockedError:
             return "Mock Error"
