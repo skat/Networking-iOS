@@ -46,7 +46,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
         case .backendError(let code):
             return "Backend Error with code: \(code)"
         case .knownError(data: let data, code: let code):
-           return "known error with code: \(code)
+           return "known error with code: \(code)"
         }
     }
     
