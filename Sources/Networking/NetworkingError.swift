@@ -7,6 +7,11 @@
 
 import Foundation
 
+public struct ErrorModel: Codable {
+    let code: Int?
+    let message: String?
+}
+
 public enum NetworkingError: Error, LocalizedError, Equatable {
     case decodingError
     case invalidURL
@@ -22,6 +27,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
     case requestFailed(_ description: String)
     case urlError(_ code: Int, _ description: String? = nil)
     case encodingError(_ description: String)
+    case knownError(data: Data, code: Int)
     
     
     // MARK: - The idea is that wherever possible, we will make the message and title into a phrase key so where we display the errors (on alert for example) we will do the .localized() and if they phrase key exists, we display the translated text, otherwise we just return the error itself.
@@ -43,6 +49,12 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
             return "JSON Conversion Failure -> \(description)"
         case .backendError(let code):
             return "Backend Error with code: \(code)"
+        case .knownError(data: let data, code: let code):
+            if let decodedResponse = try? JSONDecoder().decode(ErrorModel.self, from: data) {
+                return "Error message: \(decodedResponse.message ?? "") with statusCode: \(code)"
+            } else {
+                return "test"
+            }
         }
     }
     
@@ -50,7 +62,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
         switch self {
         case .decodingError, .invalidURL, .noResponse, .unauthorized, .unknown,
                 .noInternet, .invalidData, .requestFailed, .urlError, .backendError,
-                .unexpectedStatusCode, .encodingError:
+                .unexpectedStatusCode, .encodingError, .knownError:
             return "networkErrorTitle.\(self)"
         case .mockedError:
             return "Mock Error"
