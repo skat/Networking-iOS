@@ -7,10 +7,6 @@
 
 import Foundation
 
-public struct ErrorModel: Codable {
-    let code: Int?
-    let message: String?
-}
 
 public enum NetworkingError: Error, LocalizedError, Equatable {
     case decodingError
@@ -50,11 +46,7 @@ public enum NetworkingError: Error, LocalizedError, Equatable {
         case .backendError(let code):
             return "Backend Error with code: \(code)"
         case .knownError(data: let data, code: let code):
-            if let decodedResponse = try? JSONDecoder().decode(ErrorModel.self, from: data) {
-                return "Error message: \(decodedResponse.message ?? "") with statusCode: \(code)"
-            } else {
-                return "test"
-            }
+           return "known error with code: \(code)
         }
     }
     
