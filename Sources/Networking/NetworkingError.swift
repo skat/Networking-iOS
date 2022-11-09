@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public enum NetworkingError: Error, LocalizedError, Equatable {
     case decodingError
     case invalidURL
