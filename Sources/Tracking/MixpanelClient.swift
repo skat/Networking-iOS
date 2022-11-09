@@ -63,7 +63,7 @@ public struct MixPanelClient {
     public var trackEvent: (
         _ event: EventTrigger,
         _ screenIdentifier: String?,
-        _ extraProperties: [String: String]?
+        _ extraProperties: [String: AnyObject]?
     ) -> Void
 }
 
@@ -76,7 +76,7 @@ public extension MixPanelClient {
             
             var eventName: String = generateEventName(event)
             
-            var properties: [String: String] = [:]
+            var properties: [String: MixpanelType] = [:]
             
             if let screenIdentifier = screenIdentifier {
                 properties["ScreenIdentifier"] = screenIdentifier
@@ -87,7 +87,11 @@ public extension MixPanelClient {
                     if key == "ScreenIdentifier" {
                         assertionFailure("Key for extra property should not be ScreenIdentifier since it is a reserved key")
                     }
-                    properties[key] = value
+                    if let castedValue = value as? MixpanelType {
+                        properties[key] = castedValue
+                    } else {
+                        assertionFailure("Please send MixPanelTypes")
+                    }
                 }
             }
             
