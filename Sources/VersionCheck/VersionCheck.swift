@@ -8,7 +8,7 @@
 import FirebaseRemoteConfig
 
 
-struct VersionCheck {
+public struct VersionCheck {
     fileprivate var remoteConfig: RemoteConfig
     var currentVersionKey: String
     var minSupportedVersionKey: String
