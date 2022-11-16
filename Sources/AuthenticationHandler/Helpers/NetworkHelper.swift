@@ -15,10 +15,14 @@ extension AuthenticationHandler {
             }
             switch response.statusCode {
                 
+                
             case 200...299:
                 if data.isEmpty {
                     return nil
                 } else {
+                    let str = String(decoding: data, as: UTF8.self)
+                    NSLog("Printing request from package:")
+                    NSLog(str)
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     guard let responseType = responseType,

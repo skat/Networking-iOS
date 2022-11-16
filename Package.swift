@@ -14,8 +14,8 @@ let package = Package(
             name: "Networking-iOS",
             targets: ["Networking"]),
         .library(
-            name: "Authentication",
-            targets: ["Authentication"]),
+            name: "AuthenticationHandler",
+            targets: ["AuthenticationHandler"]),
         .library(
             name: "Tracking",
             targets: ["Tracking"]),
@@ -42,7 +42,7 @@ let package = Package(
             name: "NetworkingTests",
             dependencies: ["Networking"]),
         .target(
-            name: "Authentication",
+            name: "AuthenticationHandler",
             dependencies: []),
         .target(
             name: "Tracking",
