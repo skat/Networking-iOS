@@ -54,6 +54,8 @@ let package = Package(
             dependencies: [
                 .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
             ]),
-
+        .testTarget(
+            name: "VersionCheckTests",
+            dependencies: ["VersionCheck"]),
     ]
 )

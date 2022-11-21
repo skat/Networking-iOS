@@ -6,8 +6,8 @@
 //
 
 import Foundation
-extension VersionCheck {
-    public enum CustomError: Error, LocalizedError, Equatable {
+public extension VersionCheck {
+    enum CustomError: Error, LocalizedError, Equatable {
         case noValueFound(key: String)
         case invalidError
         case validError(error: String)

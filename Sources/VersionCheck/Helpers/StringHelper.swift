@@ -7,15 +7,11 @@
 
 import Foundation
 extension String {
-
     func versionCompare(_ otherVersion: String) -> ComparisonResult {
         let versionDelimiter = "."
-
         var versionComponents = self.components(separatedBy: versionDelimiter)
         var otherVersionComponents = otherVersion.components(separatedBy: versionDelimiter)
-
         let zeroDiff = versionComponents.count - otherVersionComponents.count
-
         if zeroDiff == 0 {
             return self.compare(otherVersion, options: .numeric)
         } else {

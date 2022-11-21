@@ -6,8 +6,8 @@
 //
 
 import Foundation
-extension VersionCheck {
-     public enum UpdateResult: Equatable {
+public extension VersionCheck {
+    enum UpdateResult: Equatable {
         case noUpdate
         case updateExist
         case mustUpdate
