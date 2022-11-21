@@ -36,8 +36,8 @@ public struct VersionCheck {
     ///   - currentVersionKey: The key has been stored in Firebase Remote Config
     ///   - minSupportedVersionKey: The key has been stored in Firebase Remote Config
     ///   - currentAppVersion: Curent version of the app that you can get by fetching "CFBundleShortVersionString" from info.plist
-    ///   - defaultValues:Sets config defaults for parameter keys and values in the default namespace config by using A dictionary mapping a String * key to a Any * value.
-    ///   - minimumFetchInterval:Indicates the default value in seconds to set for the minimum interval that needs to elapse
+    ///   - defaultValues: Sets config defaults for parameter keys and values in the default namespace config by using A dictionary mapping a String * key to a Any * value.
+    ///   - minimumFetchInterval: Indicates the default value in seconds to set for the minimum interval that needs to elapse
     /// before a fetch request can again be made to the Remote Config backend. After a fetch request to
     /// the backend has succeeded, no additional fetch requests to the backend will be allowed until the
     /// minimum fetch interval expires. Note that you can override this default on a per-fetch request
