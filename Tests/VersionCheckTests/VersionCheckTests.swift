@@ -11,7 +11,7 @@ import Firebase
 final class VersionCheckTests: XCTestCase {
 
     func testNoUpdate() async throws {
-        let input = VersionCheck.isThereAnyUpdate(currentValidVersionValue: "1.0.0",
+        let input = VersionCheck.isThereAnyUpdate(latestVersionValue: "1.0.0",
                                                   minSupportedVersionValue: "1.0.0",
                                                   currentAppVersion: "1.0.0")
         let expectedOutput = VersionCheck.UpdateResult.noUpdate
@@ -19,7 +19,7 @@ final class VersionCheckTests: XCTestCase {
     }
 
     func testUpdateExist() async throws {
-        let input = VersionCheck.isThereAnyUpdate(currentValidVersionValue: "1.0.1",
+        let input = VersionCheck.isThereAnyUpdate(latestVersionValue: "1.0.1",
                                                   minSupportedVersionValue: "1.0.0",
                                                   currentAppVersion: "1.0.0")
         let expectedOutput = VersionCheck.UpdateResult.updateExist
@@ -27,7 +27,7 @@ final class VersionCheckTests: XCTestCase {
     }
     
     func testMustUpdate() async throws {
-        let input = VersionCheck.isThereAnyUpdate(currentValidVersionValue: "1.0.1",
+        let input = VersionCheck.isThereAnyUpdate(latestVersionValue: "1.0.1",
                                                   minSupportedVersionValue: "1.0.1",
                                                   currentAppVersion: "1.0.0")
         let expectedOutput = VersionCheck.UpdateResult.mustUpdate
