@@ -19,12 +19,18 @@ let package = Package(
         .library(
             name: "Tracking",
             targets: ["Tracking"]),
+        .library(name: "VersionCheck",
+                 targets: ["VersionCheck"]),
     ],
     dependencies: [
         .package(
             url: "https://github.com/mixpanel/mixpanel-swift",
-            .upToNextMinor(from: "4.0.3")
-        )
+            from: "4.0.3"
+        ),
+        .package(
+            url: "https://github.com/firebase/firebase-ios-sdk",
+            from: "9.3.0"
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -43,5 +49,13 @@ let package = Package(
             dependencies: [
                 .product(name: "Mixpanel", package: "mixpanel-swift"),
             ]),
+        .target(
+            name: "VersionCheck",
+            dependencies: [
+                .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+            ]),
+        .testTarget(
+            name: "VersionCheckTests",
+            dependencies: ["VersionCheck"]),
     ]
 )
