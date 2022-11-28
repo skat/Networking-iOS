@@ -63,12 +63,14 @@ internal extension AuthenticationHandler {
             let expiresDate = expirationDate,
             let refreshExpiresDate = refreshExpirationDate,
             let tokenType = type,
-            let expiresIn = Calendar.current.dateComponents([.second],
-                                                            from: Date(),
-                                                            to: expiresDate).second,
-            let refreshExpiresIn = Calendar.current.dateComponents([.second],
-                                                            from: Date(),
-                                                            to: refreshExpiresDate).second
+            let expiresIn = Calendar.current.dateComponents(
+                [.second],
+                from: Date(),
+                to: expiresDate).second,
+            let refreshExpiresIn = Calendar.current.dateComponents(
+                [.second],
+                from: Date(),
+                to: refreshExpiresDate).second
         else {
             return nil
         }

@@ -8,11 +8,11 @@
 import Foundation
 
 extension AuthenticationHandler {
-    final class KeychainHelper: NSObject {
-        private struct KeychainIdentifiers {
-            static let tokenIdentifier = "TokenIdentifier"
-        }
+    private enum KeychainIdentifiers {
+        static let tokenIdentifier = "TokenIdentifier"
+    }
 
+    final class KeychainHelper: NSObject {
         static func retrieveToken() -> TokenModel? {
             guard let wrappedToken = SecurityHelper.string(matching: KeychainIdentifiers.tokenIdentifier) else { return nil }
             return AuthenticationHandler.unwrap(wrappedToken: wrappedToken)

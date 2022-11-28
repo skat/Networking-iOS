@@ -52,16 +52,18 @@ public struct VersionCheck {
                                 minimumFetchInterval: Double? = nil,
                                 defaultValues: [String: Any?]? = nil) async throws -> UpdateResult {
         let remoteConfig = RemoteConfig.remoteConfig()
-        VersionCheck.customizeSettingsIfNeeded(remoteConfig: remoteConfig,
-                                               minimumFetchInterval: minimumFetchInterval,
-                                               defaultValues: defaultValues)
+        VersionCheck.customizeSettingsIfNeeded(
+            remoteConfig: remoteConfig,
+            minimumFetchInterval: minimumFetchInterval,
+            defaultValues: defaultValues)
         let fetchedRemoteConfig = await VersionCheck.fetchRemoteConfig(remoteConfig: remoteConfig)
         let activatedRemoteConfig = try await VersionCheck.activeRemoteConfig(remoteConfig: fetchedRemoteConfig.get())
         let latestVersion = try VersionCheck.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: latestVersionKeyFromFirebase)
         let minSupportedVersion = try VersionCheck.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: minSupportedVersionKeyFromFirebase)
-        return  VersionCheck.isThereAnyUpdate(latestVersionValue: latestVersion,
-                                              minSupportedVersionValue: minSupportedVersion,
-                                              currentAppVersion: currentAppVersion)
+        return  VersionCheck.isThereAnyUpdate(
+            latestVersionValue: latestVersion,
+            minSupportedVersionValue: minSupportedVersion,
+            currentAppVersion: currentAppVersion)
     }
 }
 
