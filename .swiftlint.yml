@@ -1,0 +1,138 @@
+excluded:
+#Ejerskifte ignores
+  - ${PWD}/Shared/Sources/Shared/Translations
+  - ${PWD}/Ejerskifte/Tests
+  - ${PWD}/Authentication/Tests
+  - ${PWD}/AppController/Tests
+
+whitelist_rules:
+#opt_in_rules:
+ - explicit_init
+ - convenience_type
+ - empty_count
+ - empty_string
+ - fatal_error_message
+ - first_where
+ - toggle_bool
+ - identical_operands
+ - unused_import
+ - unused_declaration
+ - todo
+ - mark
+ - enum_case_associated_values_count
+ - closing_brace
+ - closure_end_indentation
+ - closure_parameter_position
+ - closure_spacing
+ - collection_alignment
+ - colon
+ - comma
+ - line_length
+ - type_body_length
+ - trailing_whitespace
+ - function_body_length
+ - identifier_name
+ - multiline_arguments
+ - private_over_fileprivate
+ - vertical_whitespace
+ - no_space_in_method_call
+ - opening_brace
+ - computed_accessors_order
+ - control_statement
+ - discouraged_direct_init
+ - duplicate_enum_cases
+ - duplicate_imports
+ - empty_collection_literal
+ - empty_enum_arguments
+ - empty_parameters
+ - empty_parentheses_with_trailing_closure
+ - file_name_no_space
+ - large_tuple
+ - last_where
+ - nesting
+
+# maybe
+ - compiler_protocol_init
+
+
+# - deployment_target
+# - discarded_notification_center_observer
+
+# - file_header
+# - force_try
+
+# - leading_whitespace
+# - multiline_function_chains
+# - multiline_parameters
+
+# - operator_usage_whitespace
+# - overridden_super_call
+# - reduce_boolean
+# - redundant_discardable_let
+# - redundant_optional_initialization
+# - redundant_set_access_control
+# - redundant_string_enum_value
+# - redundant_void_return
+# - return_arrow_whitespace
+# - shorthand_operator
+# - statement_position
+# - switch_case_alignment
+# - trailing_comma
+# - trailing_semicolon
+# - type_name
+# - unneeded_break_in_switch
+# - unneeded_parentheses_in_closure_argument
+# - unused_capture_list
+# - unused_closure_parameter
+# - unused_optional_binding
+# - vertical_parameter_alignment
+# - vertical_parameter_alignment_on_call
+# - vertical_whitespace
+# - vertical_whitespace_closing_braces
+# - vertical_whitespace_opening_braces
+# - void_return
+# - yoda_condition
+# - xctfail_message
+# - force_unwrapping
+
+
+line_length:
+  warning: 180
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_interpolated_strings: true
+  ignores_urls: true
+
+type_body_length:
+  warning: 400
+  
+trailing_whitespace:
+  ignores_empty_lines: true
+  ignores_comments: true
+
+
+function_body_length:
+    warning: 60
+
+identifier_name:
+  excluded:
+    - i
+    - id
+    - x
+    - y
+    - z
+    - vm
+    - vc
+
+multiline_arguments:
+  first_argument_location: next_line
+  only_enforce_after_first_closure_on_first_line: true
+
+private_over_fileprivate:
+  validate_extensions: true
+
+vertical_whitespace:
+  max_empty_lines: 2
+
+enum_case_associated_values_count:
+  warning: 6

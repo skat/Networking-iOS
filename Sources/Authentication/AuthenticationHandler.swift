@@ -174,24 +174,20 @@ extension AuthenticationHandler {
             
             guard let url = createAuthorizationURL() else { return continuation.resume(returning: .failure(CustomError.invalidURL)) }
             
-            let authenticationSession = ASWebAuthenticationSession(
-                url: url,
-                callbackURLScheme: self.configuration.callbackURLScheme) { callbackURL, error in
-                    if let error = error {
-                        continuation.resume(returning: .failure(CustomError.dissmissLogin(error: error.localizedDescription)))
+            let authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: self.configuration.callbackURLScheme) { callbackURL, error in
+                if let error = error {
+                    continuation.resume(returning: .failure(CustomError.dissmissLogin(error: error.localizedDescription)))
+                } else {
+                    if
+                        let callbackURL = callbackURL,
+                        let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems,
+                        let code = queryItems.first(where: { $0.name == "code" })?.value {
+                        continuation.resume(returning: .success(code))
                     } else {
-                        if
-                            let callbackURL = callbackURL,
-                            let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems,
-                            let code = queryItems.first(where: { $0.name == "code" })?.value
-                        {
-                            continuation.resume(returning: .success(code))
-                        } else {
-                            continuation.resume(returning: .failure(CustomError.invalidData))
-                        }
+                        continuation.resume(returning: .failure(CustomError.invalidData))
                     }
                 }
-            
+            }
             authenticationSession.presentationContextProvider = self
             authenticationSession.prefersEphemeralWebBrowserSession = true
             
@@ -213,7 +209,7 @@ extension AuthenticationHandler {
             let request = try createTokenRequest(
                 urlString: configuration.baseURL + configuration.accessTokenPath,
                 method: "POST",
-                header: ["Content-Type" : "application/x-www-form-urlencoded; charset=UTF-8"],
+                header: ["Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"],
                 body: body
             )
             KeychainHelper.invalidateToken()
@@ -237,7 +233,7 @@ extension AuthenticationHandler {
             let request = try createUserRequest(
                 urlString: configuration.baseURL + configuration.userInfoPath,
                 method: "GET",
-                header: ["Authorization" : "Bearer \(token.accessToken)"]
+                header: ["Authorization": "Bearer \(token.accessToken)"]
             )
 
             if let response = try await sendRequest(request: request, responseType: UserModel.self) {
