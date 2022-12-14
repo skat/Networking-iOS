@@ -19,8 +19,15 @@ let package = Package(
         .library(
             name: "Tracking",
             targets: ["Tracking"]),
-        .library(name: "VersionCheck",
-                 targets: ["VersionCheck"]),
+        .library(
+            name: "VersionCheck",
+            targets: ["VersionCheck"]),
+        .library(
+            name: "Maintenance",
+            targets: ["Maintenance"]),
+        .library(
+            name: "Helpers",
+            targets: ["Helpers"])
     ],
     dependencies: [
         .package(
@@ -50,9 +57,27 @@ let package = Package(
                 .product(name: "Mixpanel", package: "mixpanel-swift"),
             ]),
         .target(
+            name: "Maintenance",
+            dependencies: [
+                .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+                "Helpers"
+            ]),
+        .testTarget(
+            name: "MaintenanceTests",
+            dependencies: ["Maintenance"]),
+        .target(
+            name: "Helpers",
+            dependencies: [
+                .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+            ]),
+        .testTarget(
+            name: "HelpersTests",
+            dependencies: ["Helpers"]),
+        .target(
             name: "VersionCheck",
             dependencies: [
                 .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+                "Helpers"
             ]),
         .testTarget(
             name: "VersionCheckTests",

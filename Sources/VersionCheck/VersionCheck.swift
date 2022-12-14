@@ -6,10 +6,9 @@
 //
 
 import FirebaseRemoteConfig
-
+import Helpers
 
 public struct VersionCheck {
-    fileprivate var remoteConfig: RemoteConfig
     /// You should initiate this struct by injecting variables to be able to start using ``VersionCheck`` and it Validates the latest version of the app!
     /// - Warning:You should configure FirebaseApp in your project by injecting info.plist to them before using this module
     /// - Example:
@@ -45,20 +44,18 @@ public struct VersionCheck {
     /// allow the request to proceed. For more information, see [Firebase Doccumentation]( https://firebase.google.com/docs/remote-config/get-started?platform=ios#throttling)
     ///   - defaultValues: Sets config defaults for parameter keys and values in the default namespace config by using A dictionary mapping a String * key to a Any * value.
     /// - Returns: ``VersionCheck/UpdateResult``
-    /// - Throws: ``VersionCheck/CustomError``
+    /// - Throws: ``Helpers/CustomError``
     public static func validateVersion(latestVersionKeyFromFirebase: String,
                                 minSupportedVersionKeyFromFirebase: String,
                                 currentAppVersion: String,
-                                minimumFetchInterval: Double? = nil,
-                                defaultValues: [String: Any?]? = nil) async throws -> UpdateResult {
+                                minimumFetchInterval: Double? = nil) async throws -> UpdateResult {
         let remoteConfig = RemoteConfig.remoteConfig()
-        VersionCheck.customizeSettingsIfNeeded(remoteConfig: remoteConfig,
-                                               minimumFetchInterval: minimumFetchInterval,
-                                               defaultValues: defaultValues)
-        let fetchedRemoteConfig = await VersionCheck.fetchRemoteConfig(remoteConfig: remoteConfig)
-        let activatedRemoteConfig = try await VersionCheck.activeRemoteConfig(remoteConfig: fetchedRemoteConfig.get())
-        let latestVersion = try VersionCheck.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: latestVersionKeyFromFirebase)
-        let minSupportedVersion = try VersionCheck.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: minSupportedVersionKeyFromFirebase)
+        RemoteConfigHelper.customizeSettingsIfNeeded(remoteConfig: remoteConfig,
+                                               minimumFetchInterval: minimumFetchInterval)
+        let fetchedRemoteConfig = await RemoteConfigHelper.fetchRemoteConfig(remoteConfig: remoteConfig)
+        let activatedRemoteConfig = try await RemoteConfigHelper.activeRemoteConfig(remoteConfig: fetchedRemoteConfig.get())
+        let latestVersion = try RemoteConfigHelper.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: latestVersionKeyFromFirebase)
+        let minSupportedVersion = try RemoteConfigHelper.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: minSupportedVersionKeyFromFirebase)
         return  VersionCheck.isThereAnyUpdate(latestVersionValue: latestVersion,
                                               minSupportedVersionValue: minSupportedVersion,
                                               currentAppVersion: currentAppVersion)
@@ -66,23 +63,6 @@ public struct VersionCheck {
 }
 
 extension VersionCheck {
-    private static func customizeSettingsIfNeeded(remoteConfig: RemoteConfig,
-                                          minimumFetchInterval: Double?,
-                                          defaultValues: [String: Any?]?) {
-        if let minimumFetchInterval = minimumFetchInterval {
-            let settings = RemoteConfigSettings()
-            settings.minimumFetchInterval = minimumFetchInterval
-            remoteConfig.configSettings = settings
-        }
-        if let defaultValues = defaultValues as? [String: NSObject] {
-            remoteConfig.setDefaults(defaultValues)
-        }
-    }
-    static func getStringValueForKey(remoteConfig: RemoteConfig, key: String) throws -> String {
-        guard let value = remoteConfig.configValue(forKey: "\(key)").stringValue
-        else { throw CustomError.noValueFound(key: key)}
-        return value
-    }
     static func isThereAnyUpdate(latestVersionValue: String,
                                  minSupportedVersionValue: String,
                                  currentAppVersion: String) -> UpdateResult {

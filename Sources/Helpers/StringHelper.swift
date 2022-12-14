@@ -7,7 +7,7 @@
 
 import Foundation
 extension String {
-    func versionCompare(_ otherVersion: String) -> ComparisonResult {
+    public func versionCompare(_ otherVersion: String) -> ComparisonResult {
         let versionDelimiter = "."
         var versionComponents = self.components(separatedBy: versionDelimiter)
         var otherVersionComponents = otherVersion.components(separatedBy: versionDelimiter)
