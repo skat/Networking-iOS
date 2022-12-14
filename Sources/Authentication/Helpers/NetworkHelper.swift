@@ -50,7 +50,7 @@ extension AuthenticationHandler {
         guard let accessTokenURL = URL(string: self.configuration.baseURL + self.configuration.authorizePath) else { return nil }
         return createUrlComponents(url: accessTokenURL, queryItems: queryItems).url
     }
-    func createTokenRequest(urlString: String, method: String, header: [String : String], body: Data?) throws -> URLRequest {
+    func createTokenRequest(urlString: String, method: String, header: [String: String], body: Data?) throws -> URLRequest {
         guard
             let url = URL(string: urlString)
         else { throw CustomError.invalidURL }
@@ -61,7 +61,7 @@ extension AuthenticationHandler {
         URLRequest.httpBody = body
         return URLRequest
     }
-    func createUserRequest(urlString: String, method: String, header: [String : String]) throws -> URLRequest {
+    func createUserRequest(urlString: String, method: String, header: [String: String]) throws -> URLRequest {
         guard
             let url = URL(string: urlString)
         else { throw CustomError.invalidURL }

@@ -1,0 +1,14 @@
+name: CI
+on:
+  pull_request:
+     branches: [ main ]
+jobs:
+  ios_tests:
+    runs-on: macos-12
+    steps:
+    - name: Repository checkout
+      uses: actions/checkout@v2
+    - name: Build for iOS
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild build-for-testing -scheme SharedHelper-iOS-Package -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" | xcpretty
+    - name: Run iOS tests
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test-without-building -scheme SharedHelper-iOS-Package -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" | xcpretty

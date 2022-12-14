@@ -14,19 +14,15 @@ struct Maintenance {
                 _ bannerKey: String,
                 _ fullscreenKey: String,
                 _ bannerDetailsKey: String,
-                _ fullscreenDetailsKey: String) async throws -> (StatusType,Detail)?
+                _ fullscreenDetailsKey: String) async throws -> (StatusType, Detail)?
     
-    public static let live = Self.init {
-        minimumFetchInterval,
-        bannerKey,
-        fullscreenKey,
-        bannerDetailsKey,
-        fullscreenDetailsKey in
-        try await Maintenance.fetchFromFirebaseRemoteConfige(minimumFetchInterval: minimumFetchInterval,
-                                                             bannerKey: bannerKey,
-                                                             fullscreenKey: fullscreenKey,
-                                                             bannerDetailsKey: bannerDetailsKey,
-                                                             fullscreenDetailsKey: fullscreenDetailsKey)
+    public static let live = Self { minimumFetchInterval, bannerKey, fullscreenKey, bannerDetailsKey, fullscreenDetailsKey in
+        try await Maintenance.fetchFromFirebaseRemoteConfige(
+            minimumFetchInterval: minimumFetchInterval,
+            bannerKey: bannerKey,
+            fullscreenKey: fullscreenKey,
+            bannerDetailsKey: bannerDetailsKey,
+            fullscreenDetailsKey: fullscreenDetailsKey)
     }
     /// You should initiate this struct by injecting variables to be able to start using ``Maintenance`` and it Validates the latest version of the app!
     /// - Warning:You should configure FirebaseApp in your project by injecting info.plist to them before using this module
@@ -68,43 +64,49 @@ struct Maintenance {
                                                       bannerKey: String,
                                                       fullscreenKey: String,
                                                       bannerDetailsKey: String,
-                                                      fullscreenDetailsKey: String) async throws -> (StatusType,Detail)? {
+                                                      fullscreenDetailsKey: String) async throws -> (StatusType, Detail)? {
 
         let remoteConfig = RemoteConfig.remoteConfig()
 
-        RemoteConfigHelper.customizeSettingsIfNeeded(remoteConfig: remoteConfig,
-                                               minimumFetchInterval: minimumFetchInterval)
+        RemoteConfigHelper.customizeSettingsIfNeeded(
+            remoteConfig: remoteConfig,
+            minimumFetchInterval: minimumFetchInterval)
         
         let fetchedRemoteConfig = await RemoteConfigHelper.fetchRemoteConfig(remoteConfig: remoteConfig)
         
         let activatedRemoteConfig = try await RemoteConfigHelper.activeRemoteConfig(remoteConfig: fetchedRemoteConfig.get())
-
-        let banner = try RemoteConfigHelper.getBoolValueForKey(remoteConfig: activatedRemoteConfig.get(),
-                                                               key: bannerKey)
         
-        let fullscreen = try RemoteConfigHelper.getBoolValueForKey(remoteConfig: activatedRemoteConfig.get(),
-                                                                   key: fullscreenKey)
+        let banner = try RemoteConfigHelper.getBoolValueForKey(
+            remoteConfig: activatedRemoteConfig.get(),
+            key: bannerKey)
         
-        let bannerDetail = try RemoteConfigHelper.getModeledValueForKey(remoteConfig: activatedRemoteConfig.get(),
-                                                                        key: bannerDetailsKey,
-                                                                        expectationModel: Detail.self)
+        let fullscreen = try RemoteConfigHelper.getBoolValueForKey(
+            remoteConfig: activatedRemoteConfig.get(),
+            key: fullscreenKey)
         
-        let fullscreenDetail = try RemoteConfigHelper.getModeledValueForKey(remoteConfig: activatedRemoteConfig.get(),
-                                                                            key: fullscreenDetailsKey,
-                                                                            expectationModel: Detail.self)
+        let bannerDetail = try RemoteConfigHelper.getModeledValueForKey(
+            remoteConfig: activatedRemoteConfig.get(),
+            key: bannerDetailsKey,
+            expectationModel: Detail.self)
         
-        return isThereAnyMaintenance(fullscreen: fullscreen,
-                                     banner: banner,
-                                     fullscreenDetail: fullscreenDetail,
-                                     bannerDetail: bannerDetail)
+        let fullscreenDetail = try RemoteConfigHelper.getModeledValueForKey(
+            remoteConfig: activatedRemoteConfig.get(),
+            key: fullscreenDetailsKey,
+            expectationModel: Detail.self)
+        
+        return isThereAnyMaintenance(
+            fullscreen: fullscreen,
+            banner: banner,
+            fullscreenDetail: fullscreenDetail,
+            bannerDetail: bannerDetail)
         
         
     }
     
     static func isThereAnyMaintenance(fullscreen: Bool,
-                                              banner: Bool,
-                                              fullscreenDetail: Detail,
-                                              bannerDetail: Detail) -> (StatusType,Detail)? {
+                                      banner: Bool,
+                                      fullscreenDetail: Detail,
+                                      bannerDetail: Detail) -> (StatusType, Detail)? {
         
         if fullscreen {
             return (.fullscreen, fullscreenDetail)

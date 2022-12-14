@@ -8,24 +8,24 @@
 import Foundation
 import Security
 
-private let SecClass = kSecClass as String
-private let SecAttrService = kSecAttrService as String
-private let SecAttrGeneric = kSecAttrGeneric as String
-private let SecAttrAccount = kSecAttrAccount as String
-private let SecMatchLimit = kSecMatchLimit as String
-private let SecReturnData = kSecReturnData as String
-private let SecValueData = kSecValueData as String
-private let SecAttrAccessible = kSecAttrAccessible as String
+private let secClass = kSecClass as String
+private let secAttrService = kSecAttrService as String
+private let secAttrGeneric = kSecAttrGeneric as String
+private let secAttrAccount = kSecAttrAccount as String
+private let secMatchLimit = kSecMatchLimit as String
+private let secReturnData = kSecReturnData as String
+private let secValueData = kSecValueData as String
+private let secAttrAccessible = kSecAttrAccessible as String
 extension AuthenticationHandler {
-    final class SecurityHelper {
+    enum SecurityHelper {
         static func search(matching identifier: String) -> Data? {
             var dictionary = setupSearchDirectory(for: identifier)
             
             // Limit search results to one
-            dictionary[SecMatchLimit] = kSecMatchLimitOne
+            dictionary[secMatchLimit] = kSecMatchLimitOne
             
             // Specify we want NSData/CFData returned
-            dictionary[SecReturnData] = kCFBooleanTrue
+            dictionary[secReturnData] = kCFBooleanTrue
             
             var result: AnyObject?
             let status = SecItemCopyMatching(dictionary as CFDictionary, &result)
@@ -46,10 +46,10 @@ extension AuthenticationHandler {
             var dictionary = setupSearchDirectory(for: identifier)
             
             let encodedValue = value.data(using: .utf8)
-            dictionary[SecValueData] = encodedValue
+            dictionary[secValueData] = encodedValue
             
             // Protect the keychain entry so its only valid when the device is unlocked
-            dictionary[SecAttrAccessible] = kSecAttrAccessibleWhenUnlocked
+            dictionary[secAttrAccessible] = kSecAttrAccessibleWhenUnlocked
             
             let status = SecItemAdd(dictionary as CFDictionary, nil)
             switch status {
@@ -67,7 +67,7 @@ extension AuthenticationHandler {
             let dictionary = setupSearchDirectory(for: identifier)
             
             let encodedValue = value.data(using: .utf8)
-            let update = [SecValueData: encodedValue]
+            let update = [secValueData: encodedValue]
             
             let status = SecItemUpdate(dictionary as CFDictionary, update as CFDictionary)
             
@@ -84,15 +84,15 @@ extension AuthenticationHandler {
         
         private static func setupSearchDirectory(for identifier: String) -> [String: Any] {
             // We are looking for passwords
-            var searchDictionary: [String: Any] = [SecClass: kSecClassGenericPassword]
+            var searchDictionary: [String: Any] = [secClass: kSecClassGenericPassword]
             
             // Identify our access
-            searchDictionary[SecAttrService] = Bundle.main.bundleIdentifier
+            searchDictionary[secAttrService] = Bundle.main.bundleIdentifier
             
             // Uniquely identify the account who will be accessing the keychain
             let encodedIdentifier = identifier.data(using: .utf8)
-            searchDictionary[SecAttrGeneric] = encodedIdentifier
-            searchDictionary[SecAttrAccount] = encodedIdentifier
+            searchDictionary[secAttrGeneric] = encodedIdentifier
+            searchDictionary[secAttrAccount] = encodedIdentifier
             
             return searchDictionary
         }

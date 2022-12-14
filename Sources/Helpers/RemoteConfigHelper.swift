@@ -14,7 +14,7 @@ public struct RemoteConfigHelper {
                 switch status {
                 case .success:
                     continuation.resume(returning: .success(remoteConfig))
-                case .failure, .noFetchYet, .throttled :
+                case .failure, .noFetchYet, .throttled:
                     if let error = error {
                         continuation.resume(returning: .failure(.validError(error: error.localizedDescription)))
                     } else {

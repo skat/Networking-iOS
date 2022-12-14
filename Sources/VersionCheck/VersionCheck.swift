@@ -9,6 +9,18 @@ import FirebaseRemoteConfig
 import Helpers
 
 public struct VersionCheck {
+    var fetch: (_ latestVersionKeyFromFirebase: String,
+                _ minSupportedVersionKeyFromFirebase: String,
+                _ currentAppVersion: String,
+                _ minimumFetchInterval: Double?) async throws -> UpdateResult
+    
+    public static let live = Self { latestVersionKeyFromFirebase, minSupportedVersionKeyFromFirebase, currentAppVersion, minimumFetchInterval in
+        try await VersionCheck.validateVersion(
+            latestVersionKeyFromFirebase: latestVersionKeyFromFirebase,
+            minSupportedVersionKeyFromFirebase: minSupportedVersionKeyFromFirebase,
+            currentAppVersion: currentAppVersion,
+            minimumFetchInterval: minimumFetchInterval)
+    }
     /// You should initiate this struct by injecting variables to be able to start using ``VersionCheck`` and it Validates the latest version of the app!
     /// - Warning:You should configure FirebaseApp in your project by injecting info.plist to them before using this module
     /// - Example:
@@ -50,15 +62,17 @@ public struct VersionCheck {
                                 currentAppVersion: String,
                                 minimumFetchInterval: Double? = nil) async throws -> UpdateResult {
         let remoteConfig = RemoteConfig.remoteConfig()
-        RemoteConfigHelper.customizeSettingsIfNeeded(remoteConfig: remoteConfig,
-                                               minimumFetchInterval: minimumFetchInterval)
+        RemoteConfigHelper.customizeSettingsIfNeeded(
+            remoteConfig: remoteConfig,
+            minimumFetchInterval: minimumFetchInterval)
         let fetchedRemoteConfig = await RemoteConfigHelper.fetchRemoteConfig(remoteConfig: remoteConfig)
         let activatedRemoteConfig = try await RemoteConfigHelper.activeRemoteConfig(remoteConfig: fetchedRemoteConfig.get())
         let latestVersion = try RemoteConfigHelper.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: latestVersionKeyFromFirebase)
         let minSupportedVersion = try RemoteConfigHelper.getStringValueForKey(remoteConfig: activatedRemoteConfig.get(), key: minSupportedVersionKeyFromFirebase)
-        return  VersionCheck.isThereAnyUpdate(latestVersionValue: latestVersion,
-                                              minSupportedVersionValue: minSupportedVersion,
-                                              currentAppVersion: currentAppVersion)
+        return  VersionCheck.isThereAnyUpdate(
+            latestVersionValue: latestVersion,
+            minSupportedVersionValue: minSupportedVersion,
+            currentAppVersion: currentAppVersion)
     }
 }
 
