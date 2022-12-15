@@ -10,3 +10,4 @@ xcuserdata/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+*.resolved
