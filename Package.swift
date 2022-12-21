@@ -19,8 +19,15 @@ let package = Package(
         .library(
             name: "Tracking",
             targets: ["Tracking"]),
-        .library(name: "VersionCheck",
-                 targets: ["VersionCheck"]),
+        .library(
+            name: "VersionCheck",
+            targets: ["VersionCheck"]),
+        .library(
+            name: "Maintenance",
+            targets: ["Maintenance"]),
+        .library(
+            name: "Helpers",
+            targets: ["Helpers"])
     ],
     dependencies: [
         .package(
@@ -56,9 +63,31 @@ let package = Package(
             ],
             plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
         .target(
+            name: "Maintenance",
+            dependencies: [
+                .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+                "Helpers"
+            ],
+            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
+        .testTarget(
+            name: "MaintenanceTests",
+            dependencies: ["Maintenance"],
+            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
+        .target(
+            name: "Helpers",
+            dependencies: [
+                .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+            ],
+            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
+        .testTarget(
+            name: "HelpersTests",
+            dependencies: ["Helpers"],
+            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
+        .target(
             name: "VersionCheck",
             dependencies: [
                 .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk"),
+                "Helpers"
             ],
             plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
         .testTarget(

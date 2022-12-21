@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import VersionCheck
-import Firebase
 final class VersionCheckTests: XCTestCase {
 
     func testNoUpdate() async throws {
@@ -36,26 +35,4 @@ final class VersionCheckTests: XCTestCase {
         let expectedOutput = VersionCheck.UpdateResult.mustUpdate
         XCTAssertEqual(input, expectedOutput, "The output is not expected!")
     }
-    func testVersionCompareOrderedAscending3Version() {
-        let versionOne = "1.0.0"
-        let versionTwo = "2.0.0"
-        let input = versionOne.versionCompare(versionTwo)
-        let expectedOutput = ComparisonResult.orderedAscending
-        XCTAssertEqual(input, expectedOutput, "The output is not expected!")
-    }
-    func testVersionCompareOrderedAscending2Version() {
-        let versionOne = "1.0"
-        let versionTwo = "2.0.0"
-        let input = versionOne.versionCompare(versionTwo)
-        let expectedOutput = ComparisonResult.orderedAscending
-        XCTAssertEqual(input, expectedOutput, "The output is not expected!")
-    }
-    func testVersionCompareOrderedAscending1Version() {
-        let versionOne = "1"
-        let versionTwo = "2.0.0"
-        let input = versionOne.versionCompare(versionTwo)
-        let expectedOutput = ComparisonResult.orderedAscending
-        XCTAssertEqual(input, expectedOutput, "The output is not expected!")
-    }
-
 }

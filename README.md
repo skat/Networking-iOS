@@ -6,7 +6,7 @@
 
 - Look at this for more info: [Documentation using DocC](https://skat.github.io/Networking-iOS/documentation/authentication/)
 
-## Tracker
+## Tracking
 - Mixpanel client: TBD
 
 ## Networking
