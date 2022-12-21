@@ -10,11 +10,13 @@ import FirebaseRemoteConfig
 import Helpers
 
 struct Maintenance {
-    var fetch: (_ minimumFetchInterval: Double?,
-                _ bannerKey: String,
-                _ fullscreenKey: String,
-                _ bannerDetailsKey: String,
-                _ fullscreenDetailsKey: String) async throws -> (StatusType, Detail)?
+    var fetch: (
+        _ minimumFetchInterval: Double?,
+        _ bannerKey: String,
+        _ fullscreenKey: String,
+        _ bannerDetailsKey: String,
+        _ fullscreenDetailsKey: String
+    ) async throws -> (StatusType, Detail)?
     
     public static let live = Self { minimumFetchInterval, bannerKey, fullscreenKey, bannerDetailsKey, fullscreenDetailsKey in
         try await Maintenance.fetchFromFirebaseRemoteConfige(
@@ -60,17 +62,20 @@ struct Maintenance {
     ///   - defaultValues: Sets config defaults for parameter keys and values in the default namespace config by using A dictionary mapping a String * key to a Any * value.
     /// - Returns: ``Maintenance/StatusType`` and ``Maintenance/Detail``
     /// - Throws: ``Helpers/CustomError``
-    public static func fetchFromFirebaseRemoteConfige(minimumFetchInterval: Double? = nil,
-                                                      bannerKey: String,
-                                                      fullscreenKey: String,
-                                                      bannerDetailsKey: String,
-                                                      fullscreenDetailsKey: String) async throws -> (StatusType, Detail)? {
+    public static func fetchFromFirebaseRemoteConfige(
+        minimumFetchInterval: Double? = nil,
+        bannerKey: String,
+        fullscreenKey: String,
+        bannerDetailsKey: String,
+        fullscreenDetailsKey: String
+    ) async throws -> (StatusType, Detail)? {
 
         let remoteConfig = RemoteConfig.remoteConfig()
 
         RemoteConfigHelper.customizeSettingsIfNeeded(
             remoteConfig: remoteConfig,
-            minimumFetchInterval: minimumFetchInterval)
+            minimumFetchInterval: minimumFetchInterval
+        )
         
         let fetchedRemoteConfig = await RemoteConfigHelper.fetchRemoteConfig(remoteConfig: remoteConfig)
         
@@ -78,35 +83,42 @@ struct Maintenance {
         
         let banner = try RemoteConfigHelper.getBoolValueForKey(
             remoteConfig: activatedRemoteConfig.get(),
-            key: bannerKey)
+            key: bannerKey
+        )
         
         let fullscreen = try RemoteConfigHelper.getBoolValueForKey(
             remoteConfig: activatedRemoteConfig.get(),
-            key: fullscreenKey)
+            key: fullscreenKey
+        )
         
         let bannerDetail = try RemoteConfigHelper.getModeledValueForKey(
             remoteConfig: activatedRemoteConfig.get(),
             key: bannerDetailsKey,
-            expectationModel: Detail.self)
+            expectationModel: Detail.self
+        )
         
         let fullscreenDetail = try RemoteConfigHelper.getModeledValueForKey(
             remoteConfig: activatedRemoteConfig.get(),
             key: fullscreenDetailsKey,
-            expectationModel: Detail.self)
+            expectationModel: Detail.self
+        )
         
         return isThereAnyMaintenance(
             fullscreen: fullscreen,
             banner: banner,
             fullscreenDetail: fullscreenDetail,
-            bannerDetail: bannerDetail)
+            bannerDetail: bannerDetail
+        )
         
         
     }
     
-    static func isThereAnyMaintenance(fullscreen: Bool,
-                                      banner: Bool,
-                                      fullscreenDetail: Detail,
-                                      bannerDetail: Detail) -> (StatusType, Detail)? {
+    static func isThereAnyMaintenance(
+        fullscreen: Bool,
+        banner: Bool,
+        fullscreenDetail: Detail,
+        bannerDetail: Detail
+    ) -> (StatusType, Detail)? {
         
         if fullscreen {
             return (.fullscreen, fullscreenDetail)

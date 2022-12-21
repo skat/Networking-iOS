@@ -9,10 +9,12 @@ import FirebaseRemoteConfig
 import Helpers
 
 public struct VersionCheck {
-    var fetch: (_ latestVersionKeyFromFirebase: String,
-                _ minSupportedVersionKeyFromFirebase: String,
-                _ currentAppVersion: String,
-                _ minimumFetchInterval: Double?) async throws -> UpdateResult
+    var fetch: (
+        _ latestVersionKeyFromFirebase: String,
+        _ minSupportedVersionKeyFromFirebase: String,
+        _ currentAppVersion: String,
+        _ minimumFetchInterval: Double?
+    ) async throws -> UpdateResult
     
     public static let live = Self { latestVersionKeyFromFirebase, minSupportedVersionKeyFromFirebase, currentAppVersion, minimumFetchInterval in
         try await VersionCheck.validateVersion(
@@ -57,10 +59,12 @@ public struct VersionCheck {
     ///   - defaultValues: Sets config defaults for parameter keys and values in the default namespace config by using A dictionary mapping a String * key to a Any * value.
     /// - Returns: ``VersionCheck/UpdateResult``
     /// - Throws: ``Helpers/CustomError``
-    public static func validateVersion(latestVersionKeyFromFirebase: String,
-                                minSupportedVersionKeyFromFirebase: String,
-                                currentAppVersion: String,
-                                minimumFetchInterval: Double? = nil) async throws -> UpdateResult {
+    public static func validateVersion(
+        latestVersionKeyFromFirebase: String,
+        minSupportedVersionKeyFromFirebase: String,
+        currentAppVersion: String,
+        minimumFetchInterval: Double? = nil
+    ) async throws -> UpdateResult {
         let remoteConfig = RemoteConfig.remoteConfig()
         RemoteConfigHelper.customizeSettingsIfNeeded(
             remoteConfig: remoteConfig,
@@ -72,14 +76,17 @@ public struct VersionCheck {
         return  VersionCheck.isThereAnyUpdate(
             latestVersionValue: latestVersion,
             minSupportedVersionValue: minSupportedVersion,
-            currentAppVersion: currentAppVersion)
+            currentAppVersion: currentAppVersion
+        )
     }
 }
 
 extension VersionCheck {
-    static func isThereAnyUpdate(latestVersionValue: String,
-                                 minSupportedVersionValue: String,
-                                 currentAppVersion: String) -> UpdateResult {
+    static func isThereAnyUpdate(
+        latestVersionValue: String,
+        minSupportedVersionValue: String,
+        currentAppVersion: String
+    ) -> UpdateResult {
         if currentAppVersion.versionCompare(latestVersionValue) == .orderedAscending {
             if currentAppVersion.versionCompare(minSupportedVersionValue) == .orderedAscending {
                 return .mustUpdate
